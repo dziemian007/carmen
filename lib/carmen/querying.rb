@@ -42,5 +42,15 @@ module Carmen
       end
     end
 
+    def search(name)
+      name = name.mb_chars.downcase.normalize
+      regexp = Regexp.new(name, true)
+
+      query_collection.select do |region|
+        found_literal = name === (region.name ? region.name.mb_chars.downcase.normalize : region.name)
+        found_literal || regexp === region.name
+      end
+    end
+
   end
 end
